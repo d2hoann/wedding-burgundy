@@ -1,0 +1,54 @@
+<div class="site-shell">
+  @if (!opened()) {
+    <section class="welcome" aria-label="Phong bì thiệp cưới">
+      <div class="welcome-stars" aria-hidden="true">✦ · ✧ · ✦</div>
+      <p class="welcome-eyebrow">THE WEDDING INVITATION</p>
+      <h1 class="welcome-heading">A love story<br><em>to remember</em></h1>
+      <div class="envelope-stage" [class.is-opening]="opening()">
+        <div class="envelope-shadow"></div>
+        <div class="envelope">
+          <div class="letter"><span class="letter-small">SAVE THE DATE</span><span class="letter-names">{{w.groom}}<br><i>&</i> {{w.bride}}</span><span class="letter-date">{{w.day}} / {{w.month}} / {{w.year}}</span></div>
+          <div class="envelope-back"></div>
+          <div class="envelope-flap"></div>
+          <div class="envelope-front"></div>
+          <button type="button" class="wax-seal" (click)="openInvitation()" aria-label="Mở thiệp cưới">♥</button>
+        </div>
+      </div>
+      <button type="button" class="open-btn" (click)="openInvitation()" [disabled]="opening()">{{opening() ? 'ĐANG MỞ THIỆP…' : '✧ MỞ THIỆP CƯỚI ✧'}}</button>
+      <p class="welcome-footer">CHẠM ĐỂ MỞ LỜI MỜI YÊU THƯƠNG</p>
+      <div class="flower-stem flower-left" aria-hidden="true">✿</div><div class="flower-stem flower-right" aria-hidden="true">✿</div>
+    </section>
+  } @else {
+    <main class="invitation fade-in">
+      <header class="topbar"><span class="monogram">L <span>♥</span> N</span><span class="topbar-note">THE WEDDING OF</span><a href="#rsvp" class="topbar-cta">Xác nhận tham dự ↗</a></header>
+      <section class="hero" id="home">
+        <p class="kicker">WE ARE GETTING MARRIED</p>
+        <div class="floral-icon" aria-hidden="true">❦</div>
+        <h1 class="hero-names">{{w.groom}}<span>&</span>{{w.bride}}</h1>
+        <p class="hero-date">{{w.dateLabel}}</p>
+        <div class="hero-picture"><div class="arch-image"><img [src]="w.coverImage" alt="Ảnh minh họa cặp đôi" /></div><div class="photo-seal">LOVE<br>FOREVER</div></div>
+        <p class="hero-caption">“Nơi tình yêu bắt đầu, hạnh phúc sẽ mãi đong đầy.”</p>
+        <a href="#invitation" class="scroll-indicator">CUỘN ĐỂ XEM THIỆP <span>↓</span></a>
+      </section>
+      <section class="details paper" id="invitation">
+        <p class="kicker">TRÂN TRỌNG KÍNH MỜI</p><h2 class="section-title">Ngày chung đôi</h2>
+        <p class="intro">Bằng tất cả tình yêu và niềm hạnh phúc, gia đình chúng tôi trân trọng kính mời quý khách tới tham dự lễ thành hôn của</p>
+        <div class="families"><div><h3>NHÀ TRAI</h3><p>{{w.groomFamily.father}}<br>{{w.groomFamily.mother}}</p><small>{{w.groomFamily.address}}</small></div><div class="family-divider">❧</div><div><h3>NHÀ GÁI</h3><p>{{w.brideFamily.father}}<br>{{w.brideFamily.mother}}</p><small>{{w.brideFamily.address}}</small></div></div>
+        <div class="couple-feature"><span>CHÚ RỂ</span><h3>{{w.groom}} <i>&</i> {{w.bride}}</h3><span>CÔ DÂU</span></div>
+        <div class="hairline"></div><p class="kicker">CHUNG VUI CÙNG CHÚNG TÔI</p><div class="date-hero"><span>CHỦ NHẬT</span><strong>{{w.day}}</strong><span>THÁNG {{w.month}}<br>NĂM {{w.year}}</span></div>
+      </section>
+      <section class="event-section dark"><p class="kicker light-text">THE CELEBRATION</p><h2 class="section-title">Hẹn bạn tại</h2><div class="event-cards"><article><span class="line-icon">◇</span><h3>LỄ THÀNH HÔN</h3><strong>{{w.ceremonyTime}}</strong><p>{{w.dateLabel}}</p></article><article><span class="line-icon">✧</span><h3>TIỆC CHUNG VUI</h3><strong>{{w.receptionTime}}</strong><p>{{w.dateLabel}}</p></article></div><div class="venue"><span>ĐỊA ĐIỂM</span><h3>{{w.venue}}</h3><p>{{w.address}}</p><a [href]="w.mapUrl" target="_blank" rel="noopener noreferrer" class="outline-btn">XEM BẢN ĐỒ ↗</a></div></section>
+      <section class="countdown-section paper"><p class="kicker">COUNTING DOWN TO OUR DAY</p><h2 class="section-title">Đếm ngược ngày cưới</h2><div class="countdown"><div><b>{{pad(countdown().days)}}</b><small>NGÀY</small></div><span>:</span><div><b>{{pad(countdown().hours)}}</b><small>GIỜ</small></div><span>:</span><div><b>{{pad(countdown().minutes)}}</b><small>PHÚT</small></div><span>:</span><div><b>{{pad(countdown().seconds)}}</b><small>GIÂY</small></div></div><p class="ornament">♥</p></section>
+      <section class="gallery-section" id="album"><p class="kicker">OUR LITTLE MOMENTS</p><h2 class="section-title">Chuyện tình chúng mình</h2><div class="gallery-main"><img [src]="w.photos[activePhoto()]" alt="Ảnh kỷ niệm của cặp đôi"/><button aria-label="Ảnh trước" type="button" class="gallery-nav prev" (click)="selectPhoto(activePhoto()-1)">‹</button><button aria-label="Ảnh tiếp theo" type="button" class="gallery-nav next" (click)="selectPhoto(activePhoto()+1)">›</button></div><div class="gallery-dots">@for (photo of w.photos; track photo; let i = $index) {<button type="button" [class.selected]="i === activePhoto()" (click)="selectPhoto(i)" [attr.aria-label]="'Ảnh ' + (i+1)"></button>}</div><p class="gallery-caption">Một hành trình nhỏ, một tình yêu lớn.</p></section>
+      <section class="rsvp-section paper" id="rsvp"><p class="kicker">BE OUR GUEST</p><h2 class="section-title">Bạn sẽ đến chứ?</h2><p class="intro">Sự hiện diện của bạn là niềm vui và vinh hạnh của chúng mình.</p>
+        @if (rsvpDone()) {<div class="success-message" role="status">♥ Cảm ơn bạn đã phản hồi. Chúng mình rất trân trọng!</div>} @else {
+        <form class="wedding-form" (ngSubmit)="submitRSVP()" #rsvpForm="ngForm"><label>Họ và tên<input name="guest" type="text" [(ngModel)]="guestName" placeholder="Nhập tên của bạn" maxlength="80" required /></label><label>Bạn sẽ tham dự chứ?<select name="attending" [(ngModel)]="attending"><option [ngValue]="true">Mình sẽ tham dự</option><option [ngValue]="false">Rất tiếc, mình không thể tham dự</option></select></label>@if (attending) {<label>Số người tham dự<input name="count" type="number" min="1" max="20" [(ngModel)]="guestCount" required /></label>}<button class="primary-btn" type="submit" [disabled]="rsvpForm.invalid">GỬI XÁC NHẬN ♥</button></form>}
+        <p class="demo-note">Bản demo: phản hồi chỉ được lưu trên trình duyệt đang sử dụng.</p>
+      </section>
+      <section class="wishes-section"><p class="kicker">WISHES FOR US</p><h2 class="section-title">Gửi lời chúc</h2><form class="wedding-form" (ngSubmit)="submitWish()" #wishForm="ngForm"><label>Tên của bạn<input name="wishName" [(ngModel)]="wishName" maxlength="80" required placeholder="Tên người gửi" /></label><label>Lời chúc<textarea name="wishMessage" [(ngModel)]="wishMessage" rows="4" maxlength="800" required placeholder="Viết đôi lời yêu thương..."></textarea></label><button class="primary-btn" type="submit" [disabled]="wishForm.invalid">GỬI LỜI CHÚC ♡</button></form>@if (wishDone()) {<p class="form-feedback" role="status">Đã lưu lời chúc trên trình duyệt này.</p>}<div class="wish-list">@for (wish of wishes(); track $index) {<article><strong>{{wish.name}}</strong><time>{{wish.time}}</time><p>{{wish.message}}</p></article>} @empty {<p class="empty-wishes">Hãy là người đầu tiên gửi lời chúc tới đôi mình.</p>}</div></section>
+      <section class="gift-section dark"><p class="kicker light-text">A LITTLE GIFT</p><h2 class="section-title">Hộp mừng cưới</h2><p>Sự hiện diện của bạn đã là món quà quý giá nhất.</p><button type="button" class="outline-btn" (click)="showGift.set(!showGift())">{{showGift() ? 'ĐÓNG HỘP QUÀ' : 'MỞ HỘP QUÀ ♡'}}</button>@if (showGift()) {<div class="gift-panel"><div class="gift-tabs"><button type="button" [class.active]="giftTab()==='groom'" (click)="giftTab.set('groom')">Chú rể</button><button type="button" [class.active]="giftTab()==='bride'" (click)="giftTab.set('bride')">Cô dâu</button></div>@if ((giftTab()==='groom' ? w.giftQrGroom : w.giftQrBride); as qr) {<img [src]="qr" alt="Mã QR mừng cưới" class="gift-qr" />} @else {<div class="qr-placeholder">♡<span>THÊM MÃ QR<br>TRONG FILE CẤU HÌNH</span></div>}<p>Chỉ là minh họa – chưa có thông tin chuyển khoản.</p></div>}</section>
+      <footer class="footer"><p class="footer-script">Thank you!</p><h2>{{w.groom}} <span>&</span> {{w.bride}}</h2><p>{{w.day}} . {{w.month}} . {{w.year}}</p><div class="footer-flower">❦</div><small>MADE WITH LOVE ♥</small></footer>
+      @if (w.musicUrl) {<button type="button" class="music-toggle" (click)="toggleMusic()" [attr.aria-label]="musicPlaying() ? 'Tắt nhạc' : 'Bật nhạc'">{{musicPlaying() ? '♫' : '♪'}}</button>}
+    </main>
+  }
+</div>
